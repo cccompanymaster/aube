@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://aube-2024.kr/sitemap.xml
