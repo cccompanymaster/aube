@@ -60,6 +60,30 @@
 - [ ] Google Maps embed 의 검색어를 정확한 상호명/주소로 미세조정
 - [ ] `sitemap.xml` 의 `loc` 을 실 도메인으로 변경
 
+## 인스타그램 피드 자동 연동 (Behold.so)
+
+SNS 섹션은 `@aube_2024` 의 최신 게시물 6장을 자동으로 끌어옵니다.
+
+설정 절차:
+
+1. <https://behold.so> 가입 (무료)
+2. Instagram 계정 `@aube_2024` 연결
+3. 새 위젯 생성 → **Feed ID** 복사
+4. `js/script.js` 의 다음 줄에 ID 붙여넣기:
+   ```js
+   const BEHOLD_FEED_ID = 'AbCdEf12345';
+   ```
+5. 커밋 후 푸시 — 캐시 갱신되면 자동으로 최신 게시물 반영
+
+> Feed ID 가 비어 있거나 fetch 실패 시 자리표시자 이미지가 그대로 표시되어
+> 페이지는 절대 깨지지 않습니다.
+
+대안:
+- **수동 운영**을 선호하면 `index.html` 의 `.sns-grid a img src` 6개를
+  실제 게시물 이미지로 직접 교체해도 됩니다.
+- **Meta Graph API 직접 연동**이 필요하면 비즈니스 계정 전환 + 토큰
+  갱신 서버(Cloudflare Workers 등)가 추가로 필요합니다.
+
 ## 운영 정보
 
 - 상호: AUBE (오브)

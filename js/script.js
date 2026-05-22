@@ -124,4 +124,31 @@
   /* --------- Footer year --------- */
   const y = document.getElementById('year');
   if (y) y.textContent = new Date().getFullYear();
+
+  /* --------- Instagram feed (Behold.so) ---------
+   * behold.so 에 가입하고 @aube_2024 계정을 연결한 뒤,
+   * 발급받은 Feed ID 를 아래 BEHOLD_FEED_ID 에 입력하세요.
+   * 비워두면 위의 자리표시자 이미지가 그대로 표시됩니다.
+   */
+  const BEHOLD_FEED_ID = ''; // 예: 'AbCdEf12345'
+  const grid = document.getElementById('instaGrid');
+  if (grid && BEHOLD_FEED_ID) {
+    fetch(`https://feeds.behold.so/${BEHOLD_FEED_ID}`)
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((data) => {
+        const posts = (data && data.posts ? data.posts : []).slice(0, 6);
+        if (!posts.length) return;
+        grid.innerHTML = posts
+          .map((p, i) => {
+            const src = p.sizes && p.sizes.medium ? p.sizes.medium.mediaUrl : p.mediaUrl;
+            const url = p.permalink || 'https://instagram.com/aube_2024';
+            const cap = (p.caption || `AUBE 인스타그램 피드 ${i + 1}`).slice(0, 80);
+            return `<a href="${url}" target="_blank" rel="noopener" class="in"><img src="${src}" alt="${cap.replace(/"/g, '&quot;')}" loading="lazy" /></a>`;
+          })
+          .join('');
+      })
+      .catch(() => {
+        /* keep placeholder grid on error */
+      });
+  }
 })();
