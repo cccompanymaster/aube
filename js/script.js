@@ -20,31 +20,31 @@
     }
   }
 
-  /* --------- Hero rolling slideshow --------- */
-  const heroSlides = document.querySelectorAll('.hero-slide');
-  if (heroSlides.length > 1) {
-    const dotsWrap = document.querySelector('.hero-dots');
+  /* --------- Rolling slideshows (hero + space) --------- */
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.hero-slides').forEach((container) => {
+    const slides = container.querySelectorAll('.hero-slide');
+    if (slides.length < 2) return;
+    const dotsWrap = container.parentElement.querySelector('.hero-dots');
     let dots = [];
     if (dotsWrap) {
-      heroSlides.forEach((_, i) => {
+      slides.forEach((_, i) => {
         const dot = document.createElement('span');
         if (i === 0) dot.classList.add('is-active');
         dotsWrap.appendChild(dot);
       });
       dots = dotsWrap.querySelectorAll('span');
     }
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!reduce) {
-      let idx = 0;
-      setInterval(() => {
-        heroSlides[idx].classList.remove('is-active');
-        if (dots[idx]) dots[idx].classList.remove('is-active');
-        idx = (idx + 1) % heroSlides.length;
-        heroSlides[idx].classList.add('is-active');
-        if (dots[idx]) dots[idx].classList.add('is-active');
-      }, 4000);
-    }
-  }
+    if (reduceMotion) return;
+    let idx = 0;
+    setInterval(() => {
+      slides[idx].classList.remove('is-active');
+      if (dots[idx]) dots[idx].classList.remove('is-active');
+      idx = (idx + 1) % slides.length;
+      slides[idx].classList.add('is-active');
+      if (dots[idx]) dots[idx].classList.add('is-active');
+    }, 4000);
+  });
 
   /* --------- Nav (scroll state + mobile toggle) --------- */
   const nav = document.getElementById('nav');
@@ -131,20 +131,6 @@
     banner && banner.classList.add('show');
     float && float.classList.add('show');
     document.body.classList.add('bb-active');
-  }
-
-  /* --------- Parallax for mood bg --------- */
-  const moodImg = document.querySelector('.mood-bg img');
-  if (moodImg && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const mood = document.querySelector('.mood');
-    const onParallax = () => {
-      const rect = mood.getBoundingClientRect();
-      if (rect.bottom < 0 || rect.top > window.innerHeight) return;
-      const offset = (rect.top - window.innerHeight) * 0.08;
-      moodImg.style.transform = `translateY(${offset * -1}px)`;
-    };
-    window.addEventListener('scroll', onParallax, { passive: true });
-    onParallax();
   }
 
   /* --------- Footer year --------- */
