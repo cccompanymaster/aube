@@ -20,6 +20,32 @@
     }
   }
 
+  /* --------- Hero rolling slideshow --------- */
+  const heroSlides = document.querySelectorAll('.hero-slide');
+  if (heroSlides.length > 1) {
+    const dotsWrap = document.querySelector('.hero-dots');
+    let dots = [];
+    if (dotsWrap) {
+      heroSlides.forEach((_, i) => {
+        const dot = document.createElement('span');
+        if (i === 0) dot.classList.add('is-active');
+        dotsWrap.appendChild(dot);
+      });
+      dots = dotsWrap.querySelectorAll('span');
+    }
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce) {
+      let idx = 0;
+      setInterval(() => {
+        heroSlides[idx].classList.remove('is-active');
+        if (dots[idx]) dots[idx].classList.remove('is-active');
+        idx = (idx + 1) % heroSlides.length;
+        heroSlides[idx].classList.add('is-active');
+        if (dots[idx]) dots[idx].classList.add('is-active');
+      }, 4000);
+    }
+  }
+
   /* --------- Nav (scroll state + mobile toggle) --------- */
   const nav = document.getElementById('nav');
   const navToggle = document.querySelector('.nav-toggle');
